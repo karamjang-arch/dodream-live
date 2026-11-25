@@ -89,6 +89,12 @@
   function fetchCounts() {
     if (!currentPoll) return;
     var p = currentPoll;
+    if (LIVE_POLLS[p] && LIVE_POLLS[p].type === "private") {
+      chip.querySelector(".n").textContent = "-"; bars.innerHTML = "";
+      var d = document.createElement("div"); d.style.cssText = "font-size:24px;line-height:1.5";
+      d.textContent = "휴대폰에서 각자 적습니다. 이 문장은 어디로도 보내지지 않습니다.";
+      bars.appendChild(d); chip.hidden = !online; bars.hidden = !(online && showBars); return;
+    }
     if (p === "write") {
       if (!pin) { renderWrite(null); chip.hidden = !online; return; }
       liveRpc("live_host_posts", { p_room: room, p_pin: pin }).then(function (rows) {

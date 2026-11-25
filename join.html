@@ -112,6 +112,26 @@ footer{font-size:12px;color:var(--muted);text-align:center}
     $("wait").hidden = true; $("poll").hidden = false;
     $("pq").textContent = p.q;
     var box = $("po"); box.innerHTML = "";
+    if(p.type==="private"){
+      box.className = "opts";
+      $("pq").textContent = "한 문장 카드";
+      var card = document.createElement("div");
+      card.style.cssText = "background:#2F6B50;color:#F4F6F2;border-radius:16px;padding:24px 20px;font-size:22px;font-weight:700;line-height:1.6;text-align:center";
+      var t1 = document.createTextNode("나는 정답을 맞히기 전에 이미 ");
+      var fill = document.createElement("span"); fill.style.cssText = "border-bottom:2px solid #F4F6F2;padding:0 6px;color:#fff";
+      var t2 = document.createTextNode("입니다.");
+      var ref = document.createElement("div"); ref.style.cssText = "font-size:14px;font-weight:400;margin-top:12px;opacity:.85";
+      ref.textContent = "우리는 그가 만드신 바라 (에베소서 2:10)";
+      card.appendChild(t1); card.appendChild(fill); card.appendChild(t2); card.appendChild(ref);
+      var inp = document.createElement("input"); inp.maxLength = 30; inp.placeholder = "빈칸에 들어갈 말 (예: 하나님의 자녀)";
+      inp.style.marginTop = "12px";
+      inp.value = store("live_idcard") || ""; fill.textContent = inp.value || "　　　　";
+      inp.addEventListener("input", function(){ fill.textContent = inp.value || "　　　　"; store("live_idcard", inp.value); });
+      box.appendChild(card); box.appendChild(inp);
+      $("psend").hidden = true;
+      $("pmsg").textContent = "이 문장은 어디로도 보내지지 않습니다. 화면을 캡처해 간직하세요. 아직 낯설다면 빈칸을 비워 둔 채, 하나님이 무엇이라 써 주실지 물어도 좋습니다.";
+      return;
+    }
     if(p.type==="write"){
       box.className = "opts";
       var ta = document.createElement("textarea"); ta.id="wtext"; ta.maxLength=200;

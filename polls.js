@@ -21,6 +21,7 @@ window.LIVE_POLLS = {
   card5: { type: "many", q: "상황 카드 5 · 박사 후 한국으로 갈까, 미국에 남을까", opts: colorOpts() },
   card6: { type: "many", q: "상황 카드 6 · 믿음 안에서 만난 사람과 결혼을 생각하는데, 이 사람이 하나님이 정해 두신 \"단 한 사람\"인지 확신이 없다", opts: colorOpts() },
   card7: { type: "many", q: "상황 카드 7 · 부모님은 의대를 원하고, 나는 다른 전공을 원한다", opts: colorOpts() },
+  idcard: { type: "private", q: "한 문장 카드" },
   write: { type: "write", q: "지금 붙들고 있는 결정 하나를 적어 보내 주세요." },
   stuck: { type: "one",  q: "다섯 질문 가운데 어디에서 가장 막혔나요?",
            opts: [{ v: "1", label: "1", sub: "말씀" }, { v: "2", label: "2", sub: "지혜" }, { v: "3", label: "3", sub: "욕망 점검" }, { v: "4", label: "4", sub: "공동체" }, { v: "5", label: "5", sub: "기도" }] }
