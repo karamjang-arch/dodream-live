@@ -65,7 +65,10 @@
     var sl = ev.detail.slide, poll = sl.getAttribute("data-poll");
     cover.hidden = !(online && sl.classList.contains("cover") && ev.detail.index === 0);
     if (poll && LIVE_POLLS[poll]) openPoll(poll); else closePoll();
-    if (wall && !wall.hidden && !sl.hasAttribute("data-posts")) wall.hidden = true;
+    if (wall && !wall.hidden) wall.hidden = true;
+    var wm = sl.getAttribute("data-wall");
+    clearInterval(slotTimer); slotSig = "";
+    if (wm) { slotEl = sl.querySelector(".lv-slot"); slotMode = wm; fetchSlot(); slotTimer = setInterval(fetchSlot, 3000); }
   });
 
   var padded = null;
@@ -86,15 +89,31 @@
   function fetchCounts() {
     if (!currentPoll) return;
     var p = currentPoll;
+    if (p === "write") {
+      if (!pin) { renderWrite(null); chip.hidden = !online; return; }
+      liveRpc("live_host_posts", { p_room: room, p_pin: pin }).then(function (rows) {
+        if (p !== currentPoll) return;
+        renderWrite(rows.filter(function (r) { return r.kind === "decision"; }).length);
+        chip.hidden = false; bars.hidden = !showBars;
+      }).catch(function () {});
+      return;
+    }
     liveRpc("live_counts", { p_room: room, p_poll: p }).then(function (rows) {
       if (p !== currentPoll) return; online = true; renderBars(rows || []);
       if (padded && !padded.classList.contains("lv-on")) padded.classList.add("lv-on");
       chip.hidden = false; bars.hidden = !showBars;
     }).catch(function () {});
   }
+  function renderWrite(n) {
+    chip.querySelector(".n").textContent = n == null ? "-" : n;
+    bars.innerHTML = "";
+    var d = document.createElement("div"); d.style.cssText = "font-size:26px;line-height:1.5";
+    d.textContent = n == null ? "강사 로그인 후 보낸 결정 수가 보입니다" : "보낸 결정 " + n + "개";
+    bars.appendChild(d);
+  }
   var COLOR = { R: "#B23A30", G: "#2E7D4F", B: "#2C5D88" };
   function renderBars(rows) {
-    var p = LIVE_POLLS[currentPoll]; if (!p) return;
+    var p = LIVE_POLLS[currentPoll]; if (!p || !p.opts) return;
     var map = {}, total = 0;
     (rows || []).forEach(function (r) { map[r.choice] = r.n; total = r.total; });
     chip.querySelector(".n").textContent = total;
@@ -115,6 +134,65 @@
     });
   }
 
+  // ---------- 보낸 글 슬라이드 (data-wall="full" 고르기 / "mini" 모둠 실습)
+  var slotTimer = null, slotEl = null, slotMode = null, slotSig = "";
+  var EYE = '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>';
+  var EYEOFF = '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 19c-7 0-11-7-11-7a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 7 11 7a18.5 18.5 0 0 1-2.16 3.19"/><path d="M1 1l22 22"/></svg>';
+  function fetchSlot() {
+    if (!slotEl) return;
+    if (!pin) { slotEl.textContent = "강사 로그인(L) 후 보낸 글이 여기에 나타납니다."; return; }
+    liveRpc("live_host_posts", { p_room: room, p_pin: pin }).then(function (rows) {
+      rows = rows.slice().reverse(); // 보낸 순서
+      var sig = rows.map(function (r) { return r.id + r.status; }).join(",");
+      if (sig === slotSig) return; slotSig = sig; renderSlot(rows);
+    }).catch(function () {});
+  }
+  function renderSlot(rows) {
+    var shown = rows.filter(function (r) { return r.status !== "hidden"; });
+    var hidden = rows.filter(function (r) { return r.status === "hidden"; });
+    slotEl.innerHTML = "";
+    if (!rows.length) { slotEl.textContent = "아직 보낸 글이 없습니다."; return; }
+    var n = shown.length, mini = slotMode === "mini";
+    var fs = mini ? (n <= 4 ? 26 : n <= 7 ? 22 : 18) : (n <= 2 ? 48 : n <= 4 ? 40 : n <= 7 ? 34 : n <= 12 ? 24 : 19);
+    var cols = mini ? (n <= 4 ? 1 : 2) : (n <= 3 ? 1 : n <= 8 ? 2 : 3);
+    var grid = document.createElement("div");
+    grid.style.cssText = "display:grid;gap:" + (n > 8 ? 12 : 18) + "px;grid-template-columns:repeat(" + cols + ",minmax(0,1fr));align-content:start";
+    shown.forEach(function (r, i) {
+      var it = document.createElement("div");
+      it.style.cssText = "color:#1C2420;background:#fff;border:2px solid #D5DBD2;border-radius:14px;padding:" + (n > 8 ? "12px 16px" : "18px 22px") + ";display:flex;gap:14px;align-items:flex-start;font-size:" + fs + "px;line-height:1.45;word-break:keep-all";
+      var num = document.createElement("b"); num.textContent = (i + 1); num.style.cssText = "color:#2F6B50;min-width:1.2em";
+      var tx = document.createElement("div"); tx.style.flex = "1";
+      if (r.kind === "question") { var tg = document.createElement("small"); tg.textContent = "질문 · "; tg.style.cssText = "color:#2C5D88;font-weight:700"; tx.appendChild(tg); }
+      tx.appendChild(document.createTextNode(r.body));
+      it.appendChild(num); it.appendChild(tx);
+      if (!mini) {
+        var bt = document.createElement("button"); bt.type = "button"; bt.title = "감추기"; bt.innerHTML = EYE;
+        bt.style.cssText = "border:0;background:#EEF1EC;color:#2F6B50;border-radius:10px;padding:8px;cursor:pointer;flex:none";
+        bt.onclick = function (e) { e.stopPropagation(); setStatus(r.id, "hidden"); };
+        it.appendChild(bt);
+      }
+      grid.appendChild(it);
+    });
+    slotEl.appendChild(grid);
+    if (!mini && hidden.length) {
+      var strip = document.createElement("div");
+      strip.style.cssText = "margin-top:16px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:18px;color:#5E6963";
+      var lb = document.createElement("span"); lb.textContent = "감춘 글 " + hidden.length + "개 · 누르면 다시 보입니다:"; strip.appendChild(lb);
+      hidden.forEach(function (r) {
+        var c = document.createElement("button"); c.type = "button"; c.innerHTML = EYEOFF;
+        var t = document.createElement("span"); t.textContent = " " + (r.body.length > 14 ? r.body.slice(0, 14) + "…" : r.body); c.appendChild(t);
+        c.style.cssText = "display:inline-flex;align-items:center;gap:4px;border:1px solid #D5DBD2;background:#fff;color:#5E6963;border-radius:999px;padding:4px 10px;font:inherit;font-size:16px;cursor:pointer";
+        c.firstChild.setAttribute("width", "16"); c.firstChild.setAttribute("height", "16");
+        c.onclick = function (e) { e.stopPropagation(); setStatus(r.id, "approved"); };
+        strip.appendChild(c);
+      });
+      slotEl.appendChild(strip);
+    }
+  }
+  function setStatus(id, st) {
+    liveRpc("live_host_moderate", { p_room: room, p_pin: pin, p_id: id, p_status: st }).then(function () { slotSig = ""; fetchSlot(); });
+  }
+
   // ---------- 강사 패널 (L: 로그인, M: 글 관리)
   var panel = document.createElement("div"); panel.className = "lv-panel"; panel.hidden = true; document.body.appendChild(panel);
   panel.addEventListener("keydown", function (e) { e.stopPropagation(); });
@@ -128,7 +206,7 @@
       var v = inp.value.trim();
       liveRpc("live_host_posts", { p_room: room, p_pin: v }).then(function () {
         pin = v; try { sessionStorage.setItem("live_pin_" + room, v); } catch (e) {}
-        online = true; inp.blur(); panel.hidden = true; paintWarn();
+        online = true; inp.blur(); panel.hidden = true; paintWarn(); slotSig = ""; fetchSlot();
         if (currentPoll) liveRpc("live_host_set", { p_room: room, p_pin: pin, p_poll: currentPoll, p_open: true }).catch(function () {});
       }).catch(function (e) { panel.querySelector(".msg").textContent = /bad_pin/.test(err(e)) ? "PIN이 맞지 않습니다." : "연결되지 않았습니다: " + err(e); });
     }

@@ -63,7 +63,7 @@ footer{font-size:12px;color:var(--muted);text-align:center}
 
   <section class="card">
     <h2>내 결정 한 장</h2>
-    <p class="note" style="margin:0 0 4px">적은 내용은 <b>이 휴대폰에만</b> 저장됩니다. 아래 단추를 누를 때만 결정 한 줄이 익명으로 보내집니다.</p>
+    <p class="note" style="margin:0 0 4px">여기 적은 내용은 <b>이 휴대폰에만</b> 저장되고 어디에도 보내지지 않습니다. 결정 한 줄은 강의 화면이 안내할 때 위 칸에서 보냅니다.</p>
     <label for="d0">지금 붙들고 있는 결정</label>
     <input id="d0" maxlength="200" placeholder="예: 졸업 후 한국으로 갈지, 미국에 남을지">
     <label for="d1">1. 말씀 <small>성경이 이미 명하거나 금한 것이 있는가</small></label>
@@ -76,8 +76,6 @@ footer{font-size:12px;color:var(--muted);text-align:center}
     <textarea id="d4"></textarea>
     <label for="d5">5. 기도 <small>이 결정을 하나님 앞에 감사로 내어놓을 수 있는가</small></label>
     <textarea id="d5"></textarea>
-    <div style="margin-top:14px"><button class="btn ghost" id="dsend">결정 한 줄만 익명으로 나누기</button></div>
-    <p class="msg" id="dmsg"></p>
   </section>
 
   <section class="card">
@@ -90,7 +88,7 @@ footer{font-size:12px;color:var(--muted);text-align:center}
     </details>
   </section>
 
-  <footer>보내 주신 글은 강사가 확인한 것만 화면에 나옵니다.<br>도움이 필요하면: 미국 988(전화·문자) · 한국 109 · 위급하면 911 / 119</footer>
+  <footer>보낸 결정과 질문은 이름 없이 화면에 나올 수 있습니다.<br>도움이 필요하면: 미국 988(전화·문자) · 한국 109 · 위급하면 911 / 119</footer>
 </main>
 
 <script src="polls.js?v=11251348"></script>
@@ -114,6 +112,17 @@ footer{font-size:12px;color:var(--muted);text-align:center}
     $("wait").hidden = true; $("poll").hidden = false;
     $("pq").textContent = p.q;
     var box = $("po"); box.innerHTML = "";
+    if(p.type==="write"){
+      box.className = "opts";
+      var ta = document.createElement("textarea"); ta.id="wtext"; ta.maxLength=200;
+      ta.placeholder = "예: 졸업 후 한국으로 갈지, 미국에 남을지"; ta.value = $("d0").value;
+      ta.addEventListener("input",function(){ $("d0").value = ta.value; store("live_dec_d0", ta.value); });
+      box.appendChild(ta);
+      $("psend").hidden = false; $("psend").disabled = false; $("psend").textContent = "결정 보내기";
+      $("pmsg").textContent = store("live_sent_write_"+room) ? "보냈습니다. 고쳐서 다시 보낼 수도 있습니다." : "이름 없이 보내집니다.";
+      return;
+    }
+    $("psend").textContent = "보내기";
     box.className = "opts" + (p.opts.length===2 ? " two big" : "");
     try{ picked = JSON.parse(store(mineKey(pid)) || "[]") }catch(e){ picked = [] }
     p.opts.forEach(function(o){
@@ -144,7 +153,12 @@ footer{font-size:12px;color:var(--muted);text-align:center}
       $("pmsg").textContent = /poll_closed/.test(e.message) ? "이 질문은 마감되었습니다." : "보내지 못했습니다. 잠시 뒤 다시 눌러 주세요.";
     });
   }
-  $("psend").addEventListener("click",function(){ if(current) send(current); });
+  $("psend").addEventListener("click",function(){
+    if(!current) return;
+    if(LIVE_POLLS[current].type==="write"){
+      post("decision", $("wtext").value, $("pmsg"), $("psend"), function(){ store("live_sent_write_"+room,"1"); $("pmsg").textContent="보냈습니다. 고쳐서 다시 보낼 수도 있습니다."; });
+    } else send(current);
+  });
 
   function tick(){
     liveRpc("live_state",{p_room:room}).then(function(rows){
@@ -159,18 +173,18 @@ footer{font-size:12px;color:var(--muted);text-align:center}
     var el=$(id), k="live_dec_"+id, v=store(k); if(v) el.value=v;
     el.addEventListener("input",function(){ store(k, el.value); });
   });
-  function post(kind, text, msgEl, btn){
+  function post(kind, text, msgEl, btn, done){
     text = (text||"").trim();
     if(!text){ msgEl.textContent = "먼저 내용을 적어 주세요."; return; }
     btn.disabled = true; msgEl.textContent = "보내는 중...";
     liveRpc("live_post",{p_room:room,p_voter:voter,p_kind:kind,p_body:text.slice(0,400)}).then(function(){
-      msgEl.textContent = "익명으로 보냈습니다. 강사가 확인한 뒤 화면에 나올 수 있습니다.";
+      msgEl.textContent = "익명으로 보냈습니다.";
+      if(done) done();
     }).catch(function(e){
       msgEl.textContent = /too_fast/.test(e.message) ? "조금 뒤에 다시 보내 주세요." :
                           /too_many/.test(e.message) ? "이번 시간에 보낼 수 있는 글을 다 보냈습니다." : "보내지 못했습니다. 잠시 뒤 다시 눌러 주세요.";
     }).then(function(){ btn.disabled = false; });
   }
-  $("dsend").addEventListener("click",function(){ post("decision", $("d0").value, $("dmsg"), $("dsend")); });
   $("qsend").addEventListener("click",function(){ post("question", $("qtext").value, $("qmsg"), $("qsend")); });
 })();
 </script>
