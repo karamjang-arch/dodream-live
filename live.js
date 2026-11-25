@@ -10,12 +10,15 @@
 
   var css = document.createElement("style");
   css.textContent = [
-    ".lv-chip{position:absolute;top:28px;right:28px;z-index:3;display:flex;gap:14px;align-items:center;background:#fff;border:2px solid #D5DBD2;border-radius:16px;padding:12px 16px;font-size:22px;color:#1C2420;box-shadow:0 4px 16px rgba(0,0,0,.08)}",
+    ".slide.lv-on{padding-right:600px!important}",
+    ".slide.lv-on .card-q{font-size:52px}",
+    ".lv-chip{position:absolute;top:60px;right:40px;width:480px;box-sizing:border-box;z-index:3;display:flex;gap:14px;align-items:center;background:#fff;border:2px solid #D5DBD2;border-radius:16px;padding:12px 16px;font-size:22px;color:#1C2420;box-shadow:0 4px 16px rgba(0,0,0,.08)}",
     ".lv-chip .qr{width:120px;height:120px}",
     ".lv-chip .qr img,.lv-chip .qr canvas{width:120px!important;height:120px!important}",
     ".lv-chip b{font-size:30px;color:#2F6B50}",
-    ".lv-bars{position:absolute;right:28px;top:190px;width:430px;z-index:3;background:rgba(255,255,255,.97);border:2px solid #D5DBD2;border-radius:16px;padding:20px 22px;display:flex;flex-direction:column;gap:14px}",
-    ".lv-row{display:grid;grid-template-columns:150px 1fr 74px;gap:12px;align-items:center;font-size:24px}",
+    ".lv-chip .warn{display:block;font-size:17px;color:#B23A30;font-weight:700;margin-top:4px}",
+    ".lv-bars{position:absolute;right:40px;top:240px;width:480px;box-sizing:border-box;z-index:3;background:rgba(255,255,255,.97);border:2px solid #D5DBD2;border-radius:16px;padding:20px 22px;display:flex;flex-direction:column;gap:14px}",
+    ".lv-row{display:grid;grid-template-columns:140px 1fr 74px;gap:12px;align-items:center;font-size:24px}",
     ".lv-row .tr{height:26px;background:#EEF1EC;border-radius:13px;overflow:hidden}",
     ".lv-row .fl{height:100%;border-radius:13px;background:#2F6B50;transition:width .4s}",
     ".lv-row .pc{text-align:right;font-weight:700;font-variant-numeric:tabular-nums}",
@@ -46,7 +49,8 @@
 
   // ---------- 화면 위 요소
   var chip = stopClicks(document.createElement("div")); chip.className = "lv-chip"; chip.hidden = true;
-  chip.innerHTML = '<div class="qr"></div><div>참여 <b class="n">0</b>명<br><span style="font-size:18px;color:#5E6963">QR로 함께하기</span></div>';
+  chip.innerHTML = '<div class="qr"></div><div>참여 <b class="n">0</b>명<br><span style="font-size:18px;color:#5E6963">QR로 함께하기</span><span class="warn">L 키로 강사 로그인</span></div>';
+  function paintWarn() { chip.querySelector(".warn").hidden = !!pin; }
   var bars = stopClicks(document.createElement("div")); bars.className = "lv-bars"; bars.hidden = true;
   var cover = stopClicks(document.createElement("div")); cover.className = "lv-cover"; cover.hidden = true;
   cover.innerHTML = '<div class="qr"></div><div style="margin-top:10px;font-weight:700">휴대폰으로 함께하기</div>';
@@ -62,7 +66,11 @@
     if (wall && !wall.hidden && !sl.hasAttribute("data-posts")) wall.hidden = true;
   });
 
+  var padded = null;
   function openPoll(poll) {
+    if (padded) padded.classList.remove("lv-on");
+    padded = document.querySelector(".slide.on"); if (online && padded) padded.classList.add("lv-on");
+    paintWarn();
     currentPoll = poll; chip.hidden = !online; bars.hidden = !(online && showBars);
     renderBars(null);
     if (pin) liveRpc("live_host_set", { p_room: room, p_pin: pin, p_poll: poll, p_open: true }).catch(function () {});
@@ -70,6 +78,7 @@
   }
   function closePoll() {
     if (currentPoll && pin) liveRpc("live_host_set", { p_room: room, p_pin: pin, p_poll: null, p_open: false }).catch(function () {});
+    if (padded) { padded.classList.remove("lv-on"); padded = null; }
     currentPoll = null; chip.hidden = true; bars.hidden = true; clearInterval(countTimer);
   }
   function fetchCounts() {
@@ -77,6 +86,7 @@
     var p = currentPoll;
     liveRpc("live_counts", { p_room: room, p_poll: p }).then(function (rows) {
       if (p !== currentPoll) return; online = true; renderBars(rows || []);
+      if (padded && !padded.classList.contains("lv-on")) padded.classList.add("lv-on");
       chip.hidden = false; bars.hidden = !showBars;
     }).catch(function () {});
   }
@@ -116,7 +126,8 @@
       var v = inp.value.trim();
       liveRpc("live_host_posts", { p_room: room, p_pin: v }).then(function () {
         pin = v; try { sessionStorage.setItem("live_pin_" + room, v); } catch (e) {}
-        online = true; inp.blur(); panel.hidden = true;
+        online = true; inp.blur(); panel.hidden = true; paintWarn();
+        if (currentPoll) liveRpc("live_host_set", { p_room: room, p_pin: pin, p_poll: currentPoll, p_open: true }).catch(function () {});
       }).catch(function (e) { panel.querySelector(".msg").textContent = /bad_pin/.test(err(e)) ? "PIN이 맞지 않습니다." : "연결되지 않았습니다: " + err(e); });
     }
     panel.querySelector(".lv-ok").onclick = go;
