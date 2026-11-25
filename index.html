@@ -1,0 +1,549 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>하나님의 음성 듣기</title>
+<style>[hidden]{display:none!important}</style>
+</head>
+<body>
+
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap">
+<style>
+/* Layout: one 1600x900 stage scaled to the screen; one idea per slide; color only for the three kinds of God's will */
+:root{
+  --paper:#F4F6F2; --ink:#1C2420; --muted:#5E6963; --line:#D5DBD2; --field:#2F6B50;
+  --red:#B23A30; --green:#2E7D4F; --blue:#2C5D88; --card:#FFFFFF;
+  --serif:"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif; --sans:"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  color-scheme:light;
+}
+html,body{height:100%}
+body{margin:0;background:var(--ink);color:var(--ink);font-family:var(--sans);overflow:hidden;word-break:keep-all;overflow-wrap:break-word;line-break:strict;
+  padding-left:max(0px, env(safe-area-inset-left,0px));padding-right:max(0px, env(safe-area-inset-right,0px))}
+#viewport{position:fixed;inset:0;display:grid;place-items:center}
+#stage{width:1600px;height:900px;position:relative;background:var(--paper);transform-origin:center center;overflow:hidden}
+.slide{position:absolute;inset:0;padding:90px 120px;display:none;flex-direction:column;justify-content:center;gap:36px}
+.slide.on{display:flex}
+.eyebrow{font-size:24px;letter-spacing:.12em;color:var(--field);font-weight:700}
+h1{font-family:var(--serif);font-size:84px;line-height:1.25;margin:0;text-wrap:balance;font-weight:700}
+h2{font-family:var(--serif);font-size:64px;line-height:1.3;margin:0;text-wrap:balance;font-weight:700}
+h3{font-size:40px;margin:0;font-weight:700}
+p,li{font-size:36px;line-height:1.6;margin:0}
+.sub{font-size:34px;color:var(--muted);line-height:1.5}
+.verse{font-family:var(--serif);font-size:44px;line-height:1.75;font-weight:500;max-width:1300px}
+.verse .ref{display:block;font-family:var(--sans);font-size:26px;color:var(--muted);margin-top:24px;font-weight:500;letter-spacing:.04em}
+.verse em{font-style:normal;color:var(--field);font-weight:700}
+.quote{font-family:var(--serif);font-size:54px;line-height:1.55;font-weight:700;max-width:1300px;text-wrap:balance}
+ul{margin:0;padding-left:1.1em;display:flex;flex-direction:column;gap:14px}
+.cols{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+.cols2{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+.box{background:var(--card);border:2px solid var(--line);border-radius:14px;padding:32px 34px;display:flex;flex-direction:column;gap:14px}
+.box h3{font-size:36px}
+.box p{font-size:29px;line-height:1.55}
+.k-red{border-top:12px solid var(--red)} .k-green{border-top:12px solid var(--green)} .k-blue{border-top:12px solid var(--blue)}
+.t-red{color:var(--red)} .t-green{color:var(--green)} .t-blue{color:var(--blue)}
+.tag{display:inline-block;font-size:24px;font-weight:700;padding:6px 16px;border-radius:999px;background:var(--line);color:var(--ink);width:max-content}
+.reveal{visibility:hidden}
+.reveal.shown{visibility:visible}
+.ox{font-size:190px;font-family:var(--serif);font-weight:700;color:var(--red);line-height:1}
+.dim{color:var(--muted)}
+.big-n{font-family:var(--serif);font-size:120px;color:var(--field);line-height:1;font-weight:700}
+.section{background:var(--field);color:var(--paper)}
+.section .eyebrow{color:#CFE3D7}
+.section h1{color:var(--paper)}
+.section .sub{color:#DDE9E1}
+.cover{background:var(--ink);color:var(--paper)}
+.cover .eyebrow{color:#9CC7B0}
+.cover h1{color:var(--paper);font-size:96px}
+.cover .sub{color:#C4CCC7}
+.card-q{font-family:var(--serif);font-size:62px;line-height:1.4;font-weight:700;max-width:1300px;text-wrap:balance}
+.blank{display:inline-block;min-width:360px;border-bottom:4px solid var(--ink);margin:0 10px}
+table{border-collapse:collapse;width:100%;font-size:30px}
+th,td{text-align:left;padding:18px 20px;border-bottom:2px solid var(--line);vertical-align:top;line-height:1.45}
+th{font-size:24px;color:var(--muted);letter-spacing:.06em;font-weight:700}
+.foot{position:absolute;left:120px;right:120px;bottom:40px;display:flex;justify-content:space-between;font-size:22px;color:var(--muted)}
+.help{font-size:24px;color:var(--muted);line-height:1.6}
+#bar{position:absolute;left:0;bottom:0;height:8px;background:var(--field);transition:width .2s}
+#count{position:absolute;right:28px;bottom:20px;font-size:20px;color:var(--muted);font-variant-numeric:tabular-nums}
+#overview{position:fixed;inset:0;background:rgba(28,36,32,.96);overflow:auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;padding:24px max(16px, env(safe-area-inset-left,0px)) 24px max(16px, env(safe-area-inset-right,0px));align-content:start;z-index:5}
+#overview[hidden]{display:none}
+#overview button{font:inherit;font-size:15px;text-align:left;background:#F4F6F2;color:#1C2420;border:0;border-radius:8px;padding:12px;cursor:pointer;line-height:1.4}
+#overview button:focus-visible{outline:3px solid #9CC7B0}
+#hint{position:fixed;left:max(12px, env(safe-area-inset-left,0px));bottom:calc(10px + env(safe-area-inset-bottom,0px));font-size:13px;color:#9AA39E;z-index:4}
+svg text{font-family:var(--sans)}
+.pic{display:block;width:100%;max-width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:14px}
+.cover{background:linear-gradient(rgba(28,36,32,.72),rgba(28,36,32,.82)),url("img/field.jpg") center/cover}
+@media (prefers-reduced-motion:reduce){#bar{transition:none}}
+</style>
+
+<div id="viewport"><div id="stage">
+
+<!-- ===== 도입 ===== -->
+<section class="slide cover" data-t="표지">
+  <div class="eyebrow">두드림 수련회 선택특강</div>
+  <h1>하나님의 음성 듣기</h1>
+  <p class="sub">우리는 어떻게 하나님의 뜻을 분별할 수 있는가?</p>
+</section>
+
+<section class="slide" data-t="두 그림 투표" data-poll="pic">
+  <div class="eyebrow">함께 생각해 보기 · 투표</div>
+  <h2>지금까지 내가 생각해 온 하나님의 뜻은<br>어느 그림에 가깝습니까?</h2>
+  <div class="cols2">
+    <figure style="margin:0;display:flex;flex-direction:column;gap:14px">
+      <img class="pic" src="img/hidden.jpg" alt="빽빽한 숨은그림찾기 그림">
+      <figcaption style="font-size:32px;font-weight:700">A. 숨은그림찾기</figcaption>
+    </figure>
+    <figure style="margin:0;display:flex;flex-direction:column;gap:14px">
+      <img class="pic" src="img/field.jpg" alt="울타리 안에 여러 갈래 길이 난 들판">
+      <figcaption style="font-size:32px;font-weight:700">B. 울타리 안의 들판</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="slide" data-t="질문 뒤의 질문">
+  <div class="eyebrow">질문 뒤의 질문</div>
+  <h2>"하나님의 뜻이 뭔가요?"</h2>
+  <p class="sub reveal">그 밑에는 이런 그림이 있습니다.<br><b style="color:var(--ink)">하나님의 뜻은 외줄 하나, 발을 헛디디면 끝이다. 그래서 틀릴까 봐 두렵다.</b></p>
+  <p class="sub reveal">그리고 더 깊은 곳의 질문 하나.<br><b style="color:var(--field)">틀리면, 하나님이 나를 떠나실까?</b></p>
+</section>
+
+<section class="slide" data-t="훅">
+  <h1>하나님은 숨바꼭질하지 않으시고,<br><span style="color:var(--field)">지금도 말씀하십니다.</span></h1>
+  <p class="sub">정답을 숨겨 두고 우리가 맞히기를 기다리시는 분이 아니라,<br>자녀의 길을 인도하시는 아버지</p>
+</section>
+
+<section class="slide" data-t="음성 듣기란">
+  <div class="eyebrow">오늘 말하는 "음성 듣기"</div>
+  <div class="cols" style="align-items:stretch">
+    <div class="box"><span class="tag">1</span><h3>기록된 말씀</h3><p>하나님의 음성은 먼저 성경에서 들립니다. 말씀이 기준입니다.</p></div>
+    <div class="box"><span class="tag">2</span><h3>마음에 주시는 인도</h3><p>성령께서 말씀을 비추시고 마음에 감동을 주십니다.</p></div>
+    <div class="box"><span class="tag">3</span><h3>공동체의 검증</h3><p>그 인도가 내 소리인지, 함께 말씀 앞에서 확인합니다.</p></div>
+  </div>
+  <p class="sub" style="color:var(--ink)"><b>마음의 인도는 말씀과 공동체로 검증합니다.</b></p>
+</section>
+
+<section class="slide" data-t="마태복음 7:7-8">
+  <div class="verse">구하라 그리하면 너희에게 주실 것이요 찾으라 그리하면 찾아낼 것이요 문을 두드리라 그리하면 너희에게 열릴 것이니 구하는 이마다 받을 것이요 찾는 이는 찾아낼 것이요 두드리는 이에게는 열릴 것이니라<span class="ref">마태복음 7:7~8</span></div>
+</section>
+
+<section class="slide" data-t="세 길잡이">
+  <div class="eyebrow">오늘의 세 길잡이</div>
+  <div class="cols">
+    <div class="box"><span class="tag">토대</span><h3>프랜시스 쉐퍼</h3><p>거기 계시고 지금도 말씀하시는 하나님</p></div>
+    <div class="box"><span class="tag">지도</span><h3>R. C. 스프로울</h3><p>세 가지로 나누어 보는 하나님의 뜻</p></div>
+    <div class="box"><span class="tag">동행</span><h3>달라스 윌라드</h3><p>그 뜻 안에서 대화하며 나아가는 하나님과 동행</p></div>
+  </div>
+</section>
+
+<!-- ===== 1부 ===== -->
+<section class="slide section" data-t="1부">
+  <div class="eyebrow">1부</div>
+  <h1>세 가지 오해</h1>
+  <p class="sub">O일까요, X일까요?</p>
+</section>
+
+<section class="slide" data-t="O/X 1" data-poll="ox1">
+  <div class="eyebrow">O/X ①</div>
+  <div class="card-q">기도했더니 마음이 평안하다.<br>그러면 하나님의 뜻이다.</div>
+  <div class="reveal" style="display:flex;gap:48px;align-items:center">
+    <div class="ox">X</div>
+    <p><b>감정은 검증의 도구가 아니라 검증받을 대상입니다.</b><br><span class="dim">예수님은 겟세마네에서 평안하지 않으셨고, 요나는 도망치는 배 밑에서 깊이 잠들었습니다.</span></p>
+  </div>
+</section>
+
+<section class="slide" data-t="O/X 2" data-poll="ox2">
+  <div class="eyebrow">O/X ②</div>
+  <div class="card-q">원하던 학교에서 합격 통지가 왔다.<br>문이 열렸으니 하나님의 뜻이다.</div>
+  <div class="reveal" style="display:flex;gap:48px;align-items:center">
+    <div class="ox" style="font-size:120px">그것만으로는 X</div>
+  </div>
+  <p class="reveal"><b>열린 문은 답이 아니라 질문의 시작입니다.</b></p>
+</section>
+
+<section class="slide" data-t="열린 문 앞의 두 사람">
+  <div class="eyebrow">열린 문 앞의 두 사람</div>
+  <div class="cols2" style="align-items:start">
+    <div style="display:flex;flex-direction:column;gap:20px">
+      <h3>다윗: 열렸지만 들어가지 않았다</h3>
+      <div class="verse" style="font-size:30px">다윗의 사람들이 이르되 보소서 여호와께서 당신에게 이르시기를 내가 원수를 네 손에 넘기리니 네 생각에 좋은 대로 그에게 행하라 하시더니 이것이 그 날이니이다 하니 다윗이 일어나서 사울의 겉옷 자락을 가만히 베니라<span class="ref">사무엘상 24:4</span></div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:20px">
+      <h3>바울: 열렸지만 떠났다</h3>
+      <div class="verse" style="font-size:30px">내가 그리스도의 복음을 위하여 드로아에 이르매 주 안에서 문이 내게 열렸으되 내가 내 형제 디도를 만나지 못하므로 내 심령이 편하지 못하여 그들을 작별하고 마게도냐로 갔노라<span class="ref">고린도후서 2:12~13</span></div>
+    </div>
+  </div>
+  <p class="reveal"><b>열린 문 앞에서는 "가도 되는가"보다 "어떻게 분별할까"를 묻습니다.</b></p>
+</section>
+
+<section class="slide" data-t="O/X 3" data-poll="ox3">
+  <div class="eyebrow">O/X ③</div>
+  <div class="card-q">확실한 표적이 올 때까지<br>결정을 미루는 것이 믿음이다.</div>
+  <div class="reveal" style="display:flex;gap:48px;align-items:center">
+    <div class="ox">X</div>
+    <p><b>드러난 뜻 안에서 지금 걷는 것이 순종입니다.</b><br><span class="dim">하나님은 보통 말씀, 기도, 공동체, 형편이라는 방편으로 인도하십니다.</span></p>
+  </div>
+</section>
+
+<section class="slide" data-t="하나님의 뜻은 이것이니">
+  <div class="eyebrow">성경이 "하나님의 뜻"이라고 못 박는 곳</div>
+  <div class="verse">하나님의 뜻은 이것이니 <em>너희의 거룩함</em>이라 곧 음란을 버리고<span class="ref">데살로니가전서 4:3</span></div>
+  <div class="verse">항상 기뻐하라 쉬지 말고 기도하라 범사에 감사하라 이것이 그리스도 예수 안에서 너희를 향하신 <em>하나님의 뜻</em>이니라<span class="ref">데살로니가전서 5:16~18</span></div>
+  <p class="sub reveal">직장 이름은 없습니다. 거룩함과 감사가 있습니다.</p>
+  <p class="reveal"><b>자기중심성과 자기 의에서 벗어나는 것, 그것이 하나님의 뜻의 중심입니다.</b></p>
+</section>
+
+<section class="slide" data-t="히브리서 1:1-2">
+  <div class="verse">옛적에 선지자들을 통하여 여러 부분과 여러 모양으로 우리 조상들에게 말씀하신 하나님이 이 모든 날 마지막에는 <em>아들을 통하여 우리에게 말씀하셨으니</em> 이 아들을 만유의 상속자로 세우시고 또 그로 말미암아 모든 세계를 지으셨느니라<span class="ref">히브리서 1:1~2</span></div>
+</section>
+
+<section class="slide" data-t="쉐퍼: 세상의 이층집">
+  <div class="eyebrow">쉐퍼 · 진단: 세상은 삶을 두 층으로 나눈다</div>
+  <div class="cols2">
+    <svg viewBox="0 0 560 420" width="560" height="420" role="img" aria-label="계단 없는 이층집">
+      <rect x="60" y="40" width="440" height="160" fill="#FFFFFF" stroke="#1C2420" stroke-width="4"/>
+      <rect x="60" y="220" width="440" height="160" fill="#FFFFFF" stroke="#1C2420" stroke-width="4"/>
+      <text x="280" y="112" text-anchor="middle" font-size="30" fill="#1C2420" font-weight="700">위층: 가치의 영역</text>
+      <text x="280" y="152" text-anchor="middle" font-size="22" fill="#5E6963">의미, 도덕, 신앙 · "나에게만 참"</text>
+      <text x="280" y="292" text-anchor="middle" font-size="30" fill="#1C2420" font-weight="700">아래층: 사실의 영역</text>
+      <text x="280" y="332" text-anchor="middle" font-size="22" fill="#5E6963">자연, 과학, 역사 · "누구에게나 참"</text>
+      <path d="M110 300 C 70 250, 70 200, 120 150" fill="none" stroke="#B23A30" stroke-width="5" stroke-dasharray="10 8"/>
+      <text x="74" y="236" font-size="24" fill="#B23A30" font-weight="700">도약?</text>
+    </svg>
+    <div style="display:flex;flex-direction:column;gap:26px">
+      <p>연구실에서는 사실의 영역에 살고,<br>주일에는 가치의 영역에 올라갑니다.</p>
+      <p class="dim">"어떻게"는 객관, "왜"는 주관. 두 층 사이에는 계단이 없습니다.</p>
+      <p class="reveal"><b>말씀이라는 내용 없이 뛰어오른 음성은 내 목소리와 구별되지 않습니다.</b></p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-t="쉐퍼: 참된 진리">
+  <div class="eyebrow">쉐퍼 · 처방: 참된 진리</div>
+  <h2>하나님은 한 분이시고,<br>집도 하나입니다.</h2>
+  <p>하나님은 "왜"에 대해서도, 역사와 세상의 "어떻게"에 대해서도 참되게 말씀하셨습니다.</p>
+  <p class="reveal" style="color:var(--field)"><b>그래서 신앙은 근거 없는 도약이 아니라, 진리 위에 서는 것입니다.<br>하나님은 거기 계시고, 지금도 말씀하십니다.</b></p>
+</section>
+
+<section class="slide" data-t="쉐퍼: 순간순간의 믿음">
+  <div class="eyebrow">쉐퍼 · 삶: 진정한 영적 생활</div>
+  <div class="cols">
+    <div class="box"><h3>정직하게 다시 묻다</h3><p>"기독교는 정말 참인가?" 처음부터 다시 따져 보고, 그 진리가 왜 삶에서 실제가 되지 않는지 물었다.</p></div>
+    <div class="box"><h3>순간순간의 믿음</h3><p>하나님의 뜻은 한 번에 받아 놓는 것이 아니라, 오늘 드러난 뜻 안에서 매 순간 신뢰하며 걷는 것.</p></div>
+    <div class="box"><h3>능동적 수동성</h3><p>내 힘으로 이루려 애쓰지도, 손 놓고 기다리지도 않는다. 약속을 믿고 나를 내어드리며 걷는다.</p></div>
+  </div>
+  <p class="reveal"><b>진리가 하나이니, 삶도 하나입니다. 하나님의 뜻은 오늘 이 자리에서 순간순간 믿음으로 걷는 길입니다.</b></p>
+</section>
+
+<!-- ===== 2부 ===== -->
+<section class="slide section" data-t="2부">
+  <div class="eyebrow">2부</div>
+  <h1>성경의 틀</h1>
+  <p class="sub">하나님의 뜻에는 세 가지가 있습니다</p>
+</section>
+
+<section class="slide" data-t="스프로울의 세 뜻">
+  <div class="eyebrow">스프로울의 구분 · Can I Know God's Will?</div>
+  <table>
+    <colgroup><col style="width:270px"><col><col style="width:190px"></colgroup>
+    <tr><th style="white-space:nowrap">하나님의 뜻</th><th>무엇인가</th><th style="white-space:nowrap">우리의 자세</th></tr>
+    <tr><td><b class="t-blue">작정적 뜻</b><br><span class="dim" style="font-size:22px">decretive will</span></td><td>주권적으로 정하시고 반드시 이루시는 뜻. 다스리신다는 사실은 선명하나, 세부는 대부분 지나온 뒤에 보인다<br><span class="dim" style="font-size:24px">시간 속에서는 섭리로 이루어진다</span></td><td><b>신뢰</b>한다</td></tr>
+    <tr><td><b class="t-red">교훈적 뜻</b><br><span class="dim" style="font-size:22px">preceptive will</span></td><td>성경에 드러내신 명령. 매일 깨질 수 있지만, 분명히 드러나 있다</td><td><b>순종</b>한다</td></tr>
+    <tr><td><b class="t-green">기뻐하시는 뜻</b><br><span class="dim" style="font-size:22px">will of disposition</span></td><td>하나님이 마음으로 기뻐하시는 것. 그분의 성품</td><td><b>닮아</b> 간다</td></tr>
+  </table>
+</section>
+
+<section class="slide" data-t="에스겔 33:11">
+  <div class="eyebrow">한 절에 세 뜻이 다 있다</div>
+  <div class="verse" style="font-size:38px">너는 그들에게 말하라 주 여호와의 말씀이니라 나의 삶을 두고 맹세하노니 나는 악인이 죽는 것을 <em>기뻐하지 아니하고</em> 악인이 그의 길에서 돌이켜 떠나 사는 것을 <em>기뻐하노라</em> 이스라엘 족속아 <em>돌이키고 돌이키라</em> 너희 악한 길에서 떠나라 어찌 죽고자 하느냐 하셨다 하라<span class="ref">에스겔 33:11</span></div>
+  <div class="cols reveal">
+    <div class="box"><h3>기뻐하시는 뜻</h3><p>악인의 죽음을 기뻐하지 않으시고, 돌이켜 사는 것을 기뻐하신다</p></div>
+    <div class="box"><h3>교훈적 뜻</h3><p>그 마음이 명령이 된다. "돌이키고 돌이키라"</p></div>
+    <div class="box"><h3>작정적 뜻</h3><p>끝내 돌이키지 않으면 정하신 공의는 이루어진다</p></div>
+  </div>
+</section>
+
+<section class="slide" data-t="창세기 50:20">
+  <div class="eyebrow">한 장면에 세 뜻이 다 있다 · 요셉</div>
+  <div class="verse">당신들은 나를 해하려 하였으나 하나님은 그것을 선으로 바꾸사 오늘과 같이 많은 백성의 생명을 구원하게 하시려 하셨나니<span class="ref">창세기 50:20</span></div>
+  <p class="sub reveal">형들은 명령을 어겼고, 하나님은 그 악을 기뻐하지 않으셨으며, 그러나 정하신 구원은 이루어졌습니다.</p>
+</section>
+
+<section class="slide" data-t="사도행전 2:23">
+  <div class="verse">그가 <em>하나님께서 정하신 뜻</em>과 미리 아신 대로 내준 바 되었거늘 너희가 <em>법 없는 자들의 손</em>을 빌려 못 박아 죽였으나<span class="ref">사도행전 2:23</span></div>
+  <p class="sub reveal">정하신 뜻이 있었다고 사람의 죄가 가벼워지지 않습니다.</p>
+</section>
+
+<section class="slide" data-t="신명기 29:29">
+  <div class="verse"><em>감추어진 일</em>은 우리 하나님 여호와께 속하였거니와 <em>나타난 일</em>은 영원히 우리와 우리 자손에게 속하였나니 이는 우리에게 이 율법의 모든 말씀을 행하게 하심이니라<span class="ref">신명기 29:29</span></div>
+</section>
+
+<section class="slide" data-t="엿보기와 행하기">
+  <div class="eyebrow">스프로울이 짚은 비극</div>
+  <h2>감추어진 뜻은 엿보고 싶어 하고,<br>드러난 뜻은 지나칩니다.</h2>
+  <p class="sub reveal">하나님은 숨기신 것을 찾으라 하지 않으시고,<br><b style="color:var(--ink)">드러내신 것을 행하라</b> 하십니다.</p>
+</section>
+
+<section class="slide" data-t="창세기 2:16-17">
+  <div class="cols2">
+    <div class="verse" style="font-size:40px">여호와 하나님이 그 사람에게 명하여 이르시되 <em>동산 각종 나무의 열매는 네가 임의로 먹되</em> 선악을 알게 하는 나무의 열매는 먹지 말라 네가 먹는 날에는 반드시 죽으리라 하시니라<span class="ref">창세기 2:16~17</span></div>
+    <div style="display:flex;flex-direction:column;gap:20px">
+      <img class="pic" src="img/field.jpg" alt="울타리 안에 여러 갈래 길이 난 들판">
+      <p class="reveal"><b>첫 명령은 넓은 허락으로 시작합니다.</b><br><span class="dim">울타리 안에서는 자유롭게 고릅니다.</span></p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-t="신앙고백 1장 6절" style="gap:24px">
+  <div class="eyebrow">웨스트민스터 신앙고백 1장 6절</div>
+  <p style="font-size:25px;line-height:1.65;max-width:1360px">하나님 자신의 영광과 사람의 구원과 믿음과 삶에 필요한 모든 것에 관한 하나님의 온전한 뜻은 성경에 분명히 기록되어 있거나, 선하고 필연적인 추론으로 성경에서 이끌어 낼 수 있다. 그러므로 성령의 새로운 계시로든 사람의 전통으로든, 어느 때에도 <b>성경에 아무것도 더할 수 없다</b>. 그러나 말씀에 계시된 것을 구원에 이르도록 깨닫는 데에는 <b>하나님의 영의 내적 조명이 필요하다</b>. 또 하나님을 예배하는 일과 교회를 다스리는 일에는 사람의 활동과 모임에 공통된 몇몇 정황이 있는데, 이것들은 언제나 지켜야 할 말씀의 일반 원칙을 따라 자연의 빛과 <b>그리스도인의 분별</b>로 정해야 한다.</p>
+  <div class="cols reveal" style="gap:22px">
+    <div class="box" style="padding:24px 28px"><h3 style="font-size:32px">말씀은 충분하다</h3><p style="font-size:26px">삶에 필요한 하나님의 뜻은 성경에 있다. 새 계시로 더할 것이 없다.</p></div>
+    <div class="box" style="padding:24px 28px"><h3 style="font-size:32px">성령이 비추신다</h3><p style="font-size:26px">그 말씀을 깨닫게 하시는 분은 성령이시다. "음성 듣기"는 말씀이 내 삶에 비추어지는 일이다.</p></div>
+    <div class="box" style="padding:24px 28px"><h3 style="font-size:32px">세부는 분별로</h3><p style="font-size:26px">예배와 교회의 세부도 말씀의 일반 원칙을 따라 <b>그리스도인의 분별</b>로 정한다. 우리 삶의 결정도 같은 길을 걷는다.</p></div>
+  </div>
+</section>
+
+<section class="slide" data-t="손 밖에 있는 선택은 없다">
+  <div class="quote">하나님의 손 밖에 있는 선택은 없습니다.<br>그러나 하나님이 우리 대신 선택하시는 것도 아닙니다.</div>
+  <div class="verse" style="font-size:36px">사람이 마음으로 자기의 길을 계획할지라도 그의 걸음을 인도하시는 이는 여호와시니라<span class="ref">잠언 16:9</span></div>
+  <p class="sub reveal">작정은 들판 어딘가에 숨겨 두신 한 갈래 길이 아니라,<br><b style="color:var(--ink)">들판 전체를 받치고 있는 땅</b>입니다.</p>
+</section>
+
+<section class="slide" data-t="2부 정리 · 세 뜻 앞에서">
+  <div class="eyebrow">2부 정리 · 세 뜻 앞에서 걷는 법</div>
+  <div style="display:flex;flex-direction:column;gap:30px">
+    <div class="reveal"><h3><span class="t-blue">감추신 작정은 신뢰합니다.</span></h3><p class="sub" style="font-size:28px">하나님은 기뻐하지 않으시는 일까지 선으로 바꾸시는 분입니다. 대부분은 지나온 뒤에 보이고, 끝내 다 보이지 않는 일도 그분의 선하심 안에 있습니다.</p></div>
+    <div class="reveal"><h3><span class="t-red">드러내신 말씀</span> 안에서 <span class="t-green">기뻐하시는 뜻</span>을 분별합니다.</h3><p class="sub" style="font-size:28px">순간순간의 믿음으로, 적극적 수동성으로 걷습니다.</p></div>
+    <div class="reveal"><h3>우리가 순종하는 그 자리에서 세 뜻이 하나로 만납니다.</h3><p class="sub" style="font-size:28px">하나님은 작정하신 일을 기뻐하시는 방식으로 이루시고, 영광을 받으십니다.</p></div>
+  </div>
+</section>
+
+<section class="slide" data-t="세 칸">
+  <div class="eyebrow">함께 해 보기 · 세 칸</div>
+  <div class="cols">
+    <div class="box k-red"><h3 class="t-red">빨강 <span style="font-size:26px">· 교훈적 뜻</span></h3><p><b>드러난 뜻</b><br>성경이 명하거나 금했다</p><p class="dim">→ 순종한다</p></div>
+    <div class="box k-green"><h3 class="t-green">초록 <span style="font-size:26px">· 기뻐하시는 뜻</span></h3><p><b>울타리 안의 자유</b><br>드러난 뜻 안에서 지혜로 고른다. 하나님이 기뻐하실 길을 생각한다</p><p class="dim">→ 자유롭게, 지혜롭게</p></div>
+    <div class="box k-blue"><h3 class="t-blue">파랑 <span style="font-size:26px">· 작정적 뜻</span></h3><p><b>감추어진 뜻</b><br>내가 정할 수 없고, 하나님이 이유를 다 알려 주지 않으신 일</p><p class="dim">→ 신뢰하고, 지나고 나서 감사</p></div>
+  </div>
+  <p class="help">초록 칸의 길은 하나가 아닙니다. 기뻐하시는 뜻은 정답 하나가 아니라, 우리가 헤아리는 아버지의 마음입니다.</p>
+</section>
+
+<section class="slide" data-t="상황 카드 1 · 점심" data-poll="card1">
+  <span class="tag">상황 카드 1</span>
+  <div class="card-q">오늘 점심, 짜장면이냐 짬뽕이냐</div>
+  <div class="reveal box k-green"><p><b class="t-green">초록.</b> 몸풀기입니다. 이것까지 응답받으려 하면 첫째 오해(숨은그림찾기)입니다.</p></div>
+</section>
+
+<section class="slide" data-t="상황 카드 2 · 비자" data-poll="card2">
+  <span class="tag">상황 카드 2</span>
+  <div class="card-q">비자가 거절되었다</div>
+  <div class="reveal box k-blue"><p><b class="t-blue">파랑, 그리고 다음 걸음은 초록.</b> 닫힌 문도 섭리의 한 방식입니다. 일어난 모든 일이 하나님이 기뻐하신 일은 아닙니다. 그러나 그 일도 하나님의 손 밖에 있지 않습니다.</p></div>
+</section>
+
+<section class="slide" data-t="상황 카드 3 · 표절" data-poll="card3">
+  <span class="tag">상황 카드 3</span>
+  <div class="card-q">같은 연구실 친구의 표절을 알게 되었다</div>
+  <div class="reveal box k-red"><p><b class="t-red">빨강과 초록이 섞였습니다.</b> 덮어 줄 수는 없습니다. 어떻게 말할지는 지혜로 고릅니다. 연구 부정은 보고 의무가 따르기도 하니 학교 규정을 먼저 확인합니다.</p></div>
+</section>
+
+<section class="slide" data-t="상황 카드 4 · 주일 실험" data-poll="card4">
+  <span class="tag">상황 카드 4</span>
+  <div class="card-q">주일에 꼭 돌려야 하는 실험이 있다</div>
+  <div class="reveal box k-red"><p><b class="t-red">빨강의 원칙, 초록의 적용.</b> 주일은 일상의 일을 미리 정리한 뒤 거룩한 안식과 예배로 보내는 날입니다. 부득이한 일과 자비의 일은 그날에 할 수 있습니다. 정말 그 시간에만 할 수 있는가, 그 주의 예배를 어떻게 지킬까를 함께 묻습니다.</p></div>
+</section>
+
+<section class="slide" data-t="상황 카드 5 · 한국이냐 미국이냐" data-poll="card5">
+  <span class="tag">상황 카드 5</span>
+  <div class="card-q">박사 후 한국으로 갈까, 미국에 남을까</div>
+  <div class="reveal box k-green"><p><b class="t-green">초록.</b> 어디서 더 잘 섬길 수 있는가, 가족의 책임, 뿌리내릴 교회.<br><b>그리고 한 가지 더: 혹시 다들 그쪽으로 가니까 끌리는 것은 아닌가요?</b></p></div>
+</section>
+
+<section class="slide" data-t="예비 상황 카드 6 · 단 한 사람?" data-poll="card6">
+  <span class="tag">상황 카드 6 · 예비</span>
+  <div class="card-q">믿음 안에서 만난 사람과 결혼을 생각한다.<br>그런데 이 사람이 하나님이 정해 두신<br>"단 한 사람"인지 확신이 없다</div>
+  <div class="reveal box k-green"><p><b class="t-green">초록.</b> 하나님은 정답 배우자 한 명을 숨겨 두시지 않습니다. 믿음과 성품, 공동체의 조언 안에서 기쁘게 고릅니다. 결혼한 뒤에는 그 사람과 맺은 언약이 <b>드러난 하나님의 뜻</b>입니다.</p></div>
+</section>
+
+<section class="slide" data-t="예비 상황 카드 7 · 전공" data-poll="card7">
+  <span class="tag">상황 카드 7 · 예비</span>
+  <div class="card-q">부모님은 의대를 원하고<br>나는 다른 전공을 원한다</div>
+  <div class="reveal box k-red"><p><b class="t-red">빨강(부모를 공경하라)과 초록(전공의 선택).</b> 공경은 순종과 같은 말이 아닙니다. 성인 자녀로서 공경하며 고르는 길을 함께 생각합니다.</p></div>
+</section>
+
+<!-- ===== 3부 ===== -->
+<section class="slide section" data-t="3부">
+  <div class="eyebrow">3부</div>
+  <h1>분별의 실제</h1>
+  <p class="sub">하나님은 우리가 그분의 마음으로 고르는 친구로 자라기를 원하십니다 · 윌라드</p>
+</section>
+
+<section class="slide" data-t="로마서 12:2">
+  <div class="verse">너희는 이 세대를 본받지 말고 오직 마음을 새롭게 함으로 변화를 받아 하나님의 선하시고 <em>기뻐하시고</em> 온전하신 뜻이 무엇인지 분별하도록 하라<span class="ref">로마서 12:2</span></div>
+</section>
+
+<section class="slide" data-t="내 결정 한 장">
+  <div class="eyebrow">함께 해 보기 · 내 결정 한 장</div>
+  <h2>지금 붙들고 있는 결정 하나를<br>맨 위에 적어 보세요.</h2>
+  <p class="sub">다섯 질문을 하나씩 나누며, 그 자리에서 한 줄씩 적습니다.</p>
+</section>
+
+<section class="slide" data-t="질문 1 · 말씀">
+  <div class="big-n">1</div>
+  <h2>말씀</h2>
+  <p>성경이 이미 명하거나 금한 것이 있는가</p>
+</section>
+
+<section class="slide" data-t="질문 2 · 지혜">
+  <div class="eyebrow">질문 2</div>
+  <h2>지혜: 이 길의 대가를 누가 치르는가?</h2>
+  <p>은사와 형편은 하나님이 보통 쓰시는 길이지만, 하나님 능력의 한계선은 아닙니다.</p>
+  <div class="cols2" style="align-items:stretch">
+    <div class="box"><h3>내가 치르는 희생이라면</h3><p>내 계산을 앞세우지 않고 믿음으로 걷습니다.</p></div>
+    <div class="box"><h3>다른 사람에게 지우는 대가라면</h3><p>멈추고 다시 구하며, 그 사람들과 공동체에 여쭙니다.</p></div>
+  </div>
+  <p class="dim reveal">"네 명철을 의지하지 말라 … 범사에 그를 인정하라" (잠언 3:5~6)</p>
+</section>
+
+<section class="slide" data-t="질문 3 · 욕망 점검">
+  <div class="eyebrow">질문 3</div>
+  <h2>욕망 점검</h2>
+  <p><b>누구의 인정을 받지 못한다 해도, 나는 이 길을 원할까?</b></p>
+  <p class="sub">우리가 원하는 것의 상당수는 누군가를 따라 원한 것입니다.</p>
+  <div class="verse reveal" style="font-size:30px">예수께서 이르시되 내가 올 때까지 그를 머물게 하고자 할지라도 네게 무슨 상관이냐 <em>너는 나를 따르라</em> 하시더라<span class="ref">요한복음 21:22</span></div>
+  <p class="reveal"><b>비교와 시기에서 우리를 건지는 것은 억누름이 아니라, 하나님 안에서 누리는 만족입니다.</b> <span class="dim">(쉐퍼, 『진정한 영적 생활』의 논지)</span></p>
+</section>
+
+<section class="slide" data-t="질문 4 · 공동체">
+  <div class="big-n">4</div>
+  <h2>공동체</h2>
+  <p>나를 알고 말씀을 아는 사람은 어떻게 보는가 · <b>이 일을 물어볼 사람의 이름 하나</b></p>
+  <div class="verse" style="font-size:34px">의논이 없으면 경영이 무너지고 지략이 많으면 경영이 성립하느니라<span class="ref">잠언 15:22</span></div>
+</section>
+
+<section class="slide" data-t="질문 5 · 기도">
+  <div class="big-n">5</div>
+  <h2>기도</h2>
+  <p>이 결정을 하나님 앞에 <b>감사로</b> 내어놓을 수 있는가</p>
+</section>
+
+<section class="slide" data-t="세 표지 · 윌라드">
+  <div class="eyebrow">마음의 인도를 알아보는 세 표지 · 윌라드</div>
+  <div class="cols">
+    <div class="box"><h3>무게</h3><p>요란하지 않지만, 조용한 권위가 있다</p></div>
+    <div class="box"><h3>영</h3><p>평화롭고 온유하며, 사랑의 결을 지닌다</p></div>
+    <div class="box"><h3>내용</h3><p>성경의 가르침과 어긋나지 않는다. <b>마지막 기준은 말씀</b></p></div>
+  </div>
+  <p class="reveal"><b>환경은 신호가 아니라 자료입니다.</b><br><span class="dim">열린 문도, 닫힌 문도 그것만으로는 답이 아닙니다.</span></p>
+</section>
+
+<section class="slide" data-t="어디에서 막혔나요" data-poll="stuck">
+  <div class="eyebrow">함께 보기</div>
+  <h2>다섯 질문 가운데<br>어디에서 가장 막혔나요?</h2>
+  <p class="sub">1 말씀 · 2 지혜 · 3 욕망 점검 · 4 공동체 · 5 기도</p>
+  <p class="dim">결정의 내용은 말하지 않아도 됩니다.</p>
+</section>
+
+<!-- ===== 함께 분별하기 ===== -->
+<section class="slide section" data-t="함께 분별하기" data-posts>
+  <div class="eyebrow">함께 분별하기</div>
+  <h1>우리의 질문으로</h1>
+  <p class="sub">세 칸과 다섯 질문으로 함께 풀어 봅니다</p>
+</section>
+
+<section class="slide" data-t="사례 · 지훈">
+  <span class="tag">사례 · 가명</span>
+  <h2>박사 과정 5년 차 지훈</h2>
+  <ul>
+    <li>졸업이 늦어지고 있다</li>
+    <li>한국의 회사에서 제안이 왔다</li>
+    <li>부모님은 돌아오기를 원하신다</li>
+    <li>교회에서 맡은 사역이 있다</li>
+  </ul>
+</section>
+
+<!-- ===== 정체성 선언 ===== -->
+<section class="slide section" data-t="정체성 선언">
+  <div class="eyebrow">마치며</div>
+  <h1>무엇을 할까 이전에,<br>누구로 살까</h1>
+</section>
+
+<section class="slide" data-t="쓸모">
+  <h2>하나님은 우리를 쓸모 때문에<br>사랑하신 적이 없습니다.</h2>
+  <p class="sub">먼저 누구의 것인가, 그다음에 무엇을 할 것인가</p>
+  <p class="reveal"><b>브살렐</b>은 뽑히려고 솜씨를 부린 사람이 아니었습니다. 하나님이 먼저 이름을 불러 지명하시고 그 영으로 채우셨기에 솜씨를 다했습니다. <span class="dim">(출애굽기 31장)</span></p>
+</section>
+
+<section class="slide" data-t="붙드시는 손 · 예정">
+  <div class="eyebrow">틀리면, 하나님이 나를 떠나실까?</div>
+  <div class="verse" style="font-size:36px">곧 <em>창세 전에 그리스도 안에서</em> 우리를 택하사 우리로 사랑 안에서 그 앞에 거룩하고 흠이 없게 하시려고<span class="ref" style="margin-top:12px">에베소서 1:4</span></div>
+  <div class="verse" style="font-size:36px">또 <em>미리 정하신</em> 그들을 또한 <em>부르시고</em> 부르신 그들을 또한 <em>의롭다 하시고</em> 의롭다 하신 그들을 또한 <em>영화롭게 하셨느니라</em><span class="ref" style="margin-top:12px">로마서 8:30</span></div>
+  <p class="reveal" style="font-size:38px"><b>예정은 길을 알려 주는 교리가 아니라,<br>걷는 사람을 붙드는 교리입니다.</b></p>
+</section>
+
+<section class="slide" data-t="에베소서 2:10">
+  <div class="verse">우리는 그가 만드신 바라 그리스도 예수 안에서 선한 일을 위하여 지으심을 받은 자니 이 일은 하나님이 전에 예비하사 우리로 그 가운데서 행하게 하려 하심이니라<span class="ref">에베소서 2:10</span></div>
+</section>
+
+<section class="slide" data-t="한 문장 카드">
+  <div class="eyebrow">한 문장 카드</div>
+  <h2>나는 정답을 맞히기 전에 이미<span class="blank"></span>입니다.</h2>
+  <p class="sub">아직 낯설다면 빈칸을 비워 둔 채, 하나님이 그 자리에 무엇이라 써 주실지 묻는 것으로 시작해도 됩니다.</p>
+</section>
+
+<section class="slide" data-t="짝 기도">
+  <div class="eyebrow">짝 기도 · 1분씩</div>
+  <h2>"하나님, ○○가 이 결정 앞에서<br>두려움 없이, 지혜롭게 고르게 해 주십시오."</h2>
+  <p class="sub">마음속으로 기도해도 됩니다.</p>
+</section>
+
+<section class="slide cover" data-t="마지막 문장">
+  <h1 style="font-size:80px">감추신 뜻은 신뢰하고,<br>드러내신 뜻은 들으며 걷습니다.</h1>
+  <p class="sub">하나님의 자녀는 정답을 맞혀서 사랑받는 것이 아니라, 사랑받기에 자유롭게 선택합니다.</p>
+  <div class="foot" style="color:#9AA39E"><span>도움이 필요하면: 미국 988(전화·문자) · 한국 109 · 위급하면 911 / 119</span><span>퍼듀한인장로교회</span></div>
+</section>
+
+<div id="bar"></div><div id="count"></div>
+</div></div>
+<div id="overview" hidden></div>
+<div id="hint">→ 다음 · ← 이전 · F 전체 화면 · O 목차</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="polls.js"></script>
+<script src="live.js"></script>
+
+<script>
+(function(){
+
+  var slides=[].slice.call(document.querySelectorAll('.slide')),cur=0,stage=document.getElementById('stage');
+  function fit(){var w=window.innerWidth,h=window.innerHeight;var sc=Math.min(w/1600,h/900);stage.style.transform='scale('+sc+')'}
+  window.addEventListener('resize',fit);fit();
+  function show(n,back){
+    n=Math.max(0,Math.min(slides.length-1,n));slides[cur].classList.remove('on');cur=n;var sl=slides[cur];sl.classList.add('on');
+    var rv=sl.querySelectorAll('.reveal');for(var i=0;i<rv.length;i++)rv[i].classList.toggle('shown',!!back);
+    document.getElementById('bar').style.width=((cur+1)/slides.length*100)+'%';
+    document.getElementById('count').textContent=(cur+1)+' / '+slides.length;
+    try{document.dispatchEvent(new CustomEvent('slidechange',{detail:{index:cur,slide:sl}}))}catch(e){}
+    if(location.hash!=='#s'+(cur+1)){try{history.replaceState(null,'','#s'+(cur+1))}catch(e){location.hash='s'+(cur+1)}}
+  }
+  function next(){var h=slides[cur].querySelector('.reveal:not(.shown)');if(h){h.classList.add('shown');return}show(cur+1)}
+  function prev(){var s=slides[cur].querySelectorAll('.reveal.shown');if(s.length){s[s.length-1].classList.remove('shown');return}show(cur-1,true)}
+  var ov=document.getElementById('overview');
+  slides.forEach(function(sl,i){var b=document.createElement('button');b.type='button';b.textContent=(i+1)+'. '+(sl.dataset.t||'');
+    b.addEventListener('click',function(){ov.hidden=true;show(i)});ov.appendChild(b)});
+  document.addEventListener('keydown',function(e){
+    if(!ov.hidden&&e.key!=='o'&&e.key!=='O'&&e.key!=='Escape')return;
+    if(['ArrowRight','ArrowDown','PageDown',' ','Enter'].indexOf(e.key)>-1){e.preventDefault();next()}
+    else if(['ArrowLeft','ArrowUp','PageUp','Backspace'].indexOf(e.key)>-1){e.preventDefault();prev()}
+    else if(e.key==='Home')show(0);else if(e.key==='End')show(slides.length-1);
+    else if(e.key==='f'||e.key==='F'){try{document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen().catch(function(){})}catch(x){}}
+    else if(e.key==='o'||e.key==='O'||(e.key==='Escape'&&!ov.hidden)){ov.hidden=!ov.hidden;if(!ov.hidden)ov.children[cur].focus()}
+  });
+  document.getElementById('viewport').addEventListener('click',function(e){if(e.clientX>window.innerWidth*0.35)next();else prev()});
+  var m=/^#s(\d+)$/.exec(location.hash);show(m?parseInt(m[1],10)-1:0);
+  window.addEventListener('hashchange',function(){var m=/^#s(\d+)$/.exec(location.hash);if(m&&parseInt(m[1],10)-1!==cur)show(parseInt(m[1],10)-1)});
+})();
+</script>
+
+</body>
+</html>

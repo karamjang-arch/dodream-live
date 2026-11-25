@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>함께하기 · 하나님의 음성 듣기</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap">
+<style>
+:root{--paper:#F4F6F2;--ink:#1C2420;--muted:#5E6963;--line:#D5DBD2;--field:#2F6B50;--card:#fff;
+  --red:#B23A30;--green:#2E7D4F;--blue:#2C5D88;color-scheme:light}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  font-size:17px;line-height:1.6;word-break:keep-all;overflow-wrap:break-word;
+  padding:calc(16px + env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) calc(32px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+main{max-width:560px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+header .eyebrow{font-size:13px;letter-spacing:.1em;color:var(--field);font-weight:700}
+header h1{font-size:22px;margin:2px 0 0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px}
+.card h2{font-size:15px;margin:0 0 10px;color:var(--field);letter-spacing:.04em}
+.q{font-size:19px;font-weight:700;margin:0 0 14px}
+.opts{display:grid;gap:10px}
+.opts.two{grid-template-columns:1fr 1fr}
+.opt{font:inherit;border:2px solid var(--line);background:#fff;border-radius:12px;padding:14px 12px;text-align:left;cursor:pointer;color:var(--ink);min-height:56px}
+.opt b{font-size:20px;display:block;line-height:1.3}
+.opt span{font-size:14px;color:var(--muted)}
+.opt.on{border-color:var(--field);background:#E7F1EB}
+.opt.R b{color:var(--red)} .opt.G b{color:var(--green)} .opt.B b{color:var(--blue)}
+.opt.R.on{border-color:var(--red);background:#F8E9E7} .opt.G.on{border-color:var(--green);background:#E6F2EA} .opt.B.on{border-color:var(--blue);background:#E7EEF5}
+.big .opt{text-align:center} .big .opt b{font-size:40px}
+.btn{font:inherit;font-weight:700;border:0;border-radius:12px;padding:13px 16px;background:var(--field);color:#fff;cursor:pointer;width:100%}
+.btn:disabled{opacity:.45}
+.btn.ghost{background:#fff;color:var(--field);border:2px solid var(--field)}
+.msg{font-size:14px;color:var(--muted);margin-top:10px;min-height:1.4em}
+.wait{color:var(--muted);font-size:16px;margin:0}
+textarea,input{font:inherit;width:100%;border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:#fff;color:var(--ink)}
+textarea{min-height:76px;resize:vertical}
+label{display:block;font-size:14px;font-weight:700;margin:12px 0 4px}
+label small{font-weight:400;color:var(--muted)}
+.note{font-size:13px;color:var(--muted)}
+details summary{cursor:pointer;font-weight:700;color:var(--field)}
+footer{font-size:12px;color:var(--muted);text-align:center}
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <div class="eyebrow">두드림 · 선택특강</div>
+    <h1>하나님의 음성 듣기 · 함께하기</h1>
+    <p class="note" style="margin:4px 0 0">이름은 어디에도 남지 않습니다. 모든 참여는 익명입니다.</p>
+  </header>
+
+  <section class="card" id="pollCard" aria-live="polite">
+    <h2>지금 함께 보는 질문</h2>
+    <p class="wait" id="wait">다음 질문을 기다리고 있습니다. 화면에 질문이 나오면 여기에도 나타납니다.</p>
+    <div id="poll" hidden>
+      <p class="q" id="pq"></p>
+      <div class="opts" id="po"></div>
+      <button class="btn" id="psend" hidden>보내기</button>
+      <p class="msg" id="pmsg"></p>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>내 결정 한 장</h2>
+    <p class="note" style="margin:0 0 4px">적은 내용은 <b>이 휴대폰에만</b> 저장됩니다. 아래 단추를 누를 때만 결정 한 줄이 익명으로 보내집니다.</p>
+    <label for="d0">지금 붙들고 있는 결정</label>
+    <input id="d0" maxlength="200" placeholder="예: 졸업 후 한국으로 갈지, 미국에 남을지">
+    <label for="d1">1. 말씀 <small>성경이 이미 명하거나 금한 것이 있는가</small></label>
+    <textarea id="d1"></textarea>
+    <label for="d2">2. 지혜 <small>이 길의 대가를 누가 치르는가? 나인가, 다른 사람인가?</small></label>
+    <textarea id="d2"></textarea>
+    <label for="d3">3. 욕망 점검 <small>누구의 인정을 받지 못한다 해도, 나는 이 길을 원할까?</small></label>
+    <textarea id="d3"></textarea>
+    <label for="d4">4. 공동체 <small>이 일을 물어볼 사람의 이름 하나</small></label>
+    <textarea id="d4"></textarea>
+    <label for="d5">5. 기도 <small>이 결정을 하나님 앞에 감사로 내어놓을 수 있는가</small></label>
+    <textarea id="d5"></textarea>
+    <div style="margin-top:14px"><button class="btn ghost" id="dsend">결정 한 줄만 익명으로 나누기</button></div>
+    <p class="msg" id="dmsg"></p>
+  </section>
+
+  <section class="card">
+    <details>
+      <summary>하나님의 뜻 때문에 고민해 본 질문 남기기</summary>
+      <p class="note">함께 분별하기 시간에 몇 개를 골라 함께 풀어 봅니다.</p>
+      <textarea id="qtext" maxlength="400" placeholder="질문을 적어 주세요"></textarea>
+      <div style="margin-top:10px"><button class="btn ghost" id="qsend">질문 보내기</button></div>
+      <p class="msg" id="qmsg"></p>
+    </details>
+  </section>
+
+  <footer>보내 주신 글은 강사가 확인한 것만 화면에 나옵니다.<br>도움이 필요하면: 미국 988(전화·문자) · 한국 109 · 위급하면 911 / 119</footer>
+</main>
+
+<script src="polls.js"></script>
+<script>
+(function(){
+  var params = new URLSearchParams(location.search);
+  var room = (params.get("r") || LIVE_CONFIG.defaultRoom).toLowerCase();
+  function store(k,v){try{ if(v===undefined) return localStorage.getItem(k); localStorage.setItem(k,v);}catch(e){return null}}
+  var voter = store("live_voter");
+  if(!voter){ voter = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() :
+      "xxxxxxxx-xxxx-4xxx-8xxx-xxxxxxxxxxxx".replace(/x/g,function(){return (Math.random()*16|0).toString(16)});
+    store("live_voter",voter); }
+
+  var $ = function(id){return document.getElementById(id)};
+  var current = null, picked = [];
+
+  function mineKey(p){return "live_vote_"+room+"_"+p}
+  function renderPoll(pid){
+    var p = LIVE_POLLS[pid];
+    if(!p){ $("poll").hidden = true; $("wait").hidden = false; return; }
+    $("wait").hidden = true; $("poll").hidden = false;
+    $("pq").textContent = p.q;
+    var box = $("po"); box.innerHTML = "";
+    box.className = "opts" + (p.opts.length===2 ? " two big" : "");
+    try{ picked = JSON.parse(store(mineKey(pid)) || "[]") }catch(e){ picked = [] }
+    p.opts.forEach(function(o){
+      var b = document.createElement("button"); b.type="button"; b.className="opt "+o.v;
+      var t = document.createElement("b"); t.textContent = o.label; b.appendChild(t);
+      if(o.sub){ var s=document.createElement("span"); s.textContent=o.sub; b.appendChild(s); }
+      if(picked.indexOf(o.v)>-1) b.classList.add("on");
+      b.addEventListener("click",function(){
+        if(p.type==="one"){ picked=[o.v]; send(pid); }
+        else { var i=picked.indexOf(o.v); if(i>-1) picked.splice(i,1); else picked.push(o.v); paint(); $("psend").disabled = !picked.length; }
+        paint();
+      });
+      box.appendChild(b);
+    });
+    $("psend").hidden = p.type!=="many"; $("psend").disabled = !picked.length;
+    $("pmsg").textContent = picked.length ? "보냈습니다. 바꾸려면 다시 고르세요." : (p.type==="many" ? "해당하는 색을 모두 고른 뒤 보내기를 누르세요." : "");
+  }
+  function paint(){
+    var bs = $("po").children, p = LIVE_POLLS[current];
+    for(var i=0;i<bs.length;i++) bs[i].classList.toggle("on", picked.indexOf(p.opts[i].v)>-1);
+  }
+  function send(pid){
+    $("pmsg").textContent = "보내는 중...";
+    liveRpc("live_vote",{p_room:room,p_poll:pid,p_voter:voter,p_choices:picked}).then(function(){
+      store(mineKey(pid), JSON.stringify(picked));
+      $("pmsg").textContent = "보냈습니다. 바꾸려면 다시 고르세요.";
+    }).catch(function(e){
+      $("pmsg").textContent = /poll_closed/.test(e.message) ? "이 질문은 마감되었습니다." : "보내지 못했습니다. 잠시 뒤 다시 눌러 주세요.";
+    });
+  }
+  $("psend").addEventListener("click",function(){ if(current) send(current); });
+
+  function tick(){
+    liveRpc("live_state",{p_room:room}).then(function(rows){
+      var s = rows && rows[0]; var pid = (s && s.poll_open) ? s.current_poll : null;
+      if(pid !== current){ current = pid; renderPoll(pid); }
+    }).catch(function(){}).then(function(){ setTimeout(tick, 2000); });
+  }
+  tick();
+
+  // 내 결정 한 장: 이 기기에만 저장
+  ["d0","d1","d2","d3","d4","d5"].forEach(function(id){
+    var el=$(id), k="live_dec_"+id, v=store(k); if(v) el.value=v;
+    el.addEventListener("input",function(){ store(k, el.value); });
+  });
+  function post(kind, text, msgEl, btn){
+    text = (text||"").trim();
+    if(!text){ msgEl.textContent = "먼저 내용을 적어 주세요."; return; }
+    btn.disabled = true; msgEl.textContent = "보내는 중...";
+    liveRpc("live_post",{p_room:room,p_voter:voter,p_kind:kind,p_body:text.slice(0,400)}).then(function(){
+      msgEl.textContent = "익명으로 보냈습니다. 강사가 확인한 뒤 화면에 나올 수 있습니다.";
+    }).catch(function(e){
+      msgEl.textContent = /too_fast/.test(e.message) ? "조금 뒤에 다시 보내 주세요." :
+                          /too_many/.test(e.message) ? "이번 시간에 보낼 수 있는 글을 다 보냈습니다." : "보내지 못했습니다. 잠시 뒤 다시 눌러 주세요.";
+    }).then(function(){ btn.disabled = false; });
+  }
+  $("dsend").addEventListener("click",function(){ post("decision", $("d0").value, $("dmsg"), $("dsend")); });
+  $("qsend").addEventListener("click",function(){ post("question", $("qtext").value, $("qmsg"), $("qsend")); });
+})();
+</script>
+</body>
+</html>
