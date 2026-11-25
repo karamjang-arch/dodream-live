@@ -49,11 +49,13 @@
 
   // ---------- 화면 위 요소
   var chip = stopClicks(document.createElement("div")); chip.className = "lv-chip"; chip.hidden = true;
-  chip.innerHTML = '<div class="qr"></div><div>참여 <b class="n">0</b>명<br><span style="font-size:18px;color:#5E6963">QR로 함께하기</span><span class="warn">L 키로 강사 로그인</span></div>';
-  function paintWarn() { chip.querySelector(".warn").hidden = !!pin; }
+  chip.innerHTML = '<div class="qr"></div><div>참여 <b class="n">0</b>명<br><span style="font-size:18px;color:#5E6963">QR로 함께하기</span><span class="warn" role="button" tabindex="0" style="cursor:pointer;text-decoration:underline">강사 로그인 (L 키 또는 여기를 누르세요)</span></div>';
+  function paintWarn() { chip.querySelector(".warn").hidden = !!pin; cover.querySelector(".warn").hidden = !!pin; }
+  chip.querySelector(".warn").addEventListener("click", function () { showLogin(); });
   var bars = stopClicks(document.createElement("div")); bars.className = "lv-bars"; bars.hidden = true;
   var cover = stopClicks(document.createElement("div")); cover.className = "lv-cover"; cover.hidden = true;
-  cover.innerHTML = '<div class="qr"></div><div style="margin-top:10px;font-weight:700">휴대폰으로 함께하기</div>';
+  cover.innerHTML = '<div class="qr"></div><div style="margin-top:10px;font-weight:700">휴대폰으로 함께하기</div><div class="warn" role="button" style="cursor:pointer;color:#B23A30;font-size:16px;font-weight:700;margin-top:6px;text-decoration:underline">강사 로그인 (L)</div>';
+  cover.querySelector(".warn").addEventListener("click", function () { showLogin(); });
   var stage = document.getElementById("stage");
   stage.appendChild(chip); stage.appendChild(bars); stage.appendChild(cover);
   setTimeout(function () { qr(chip.querySelector(".qr"), 120); qr(cover.querySelector(".qr"), 240); }, 300);
@@ -193,7 +195,7 @@
     var t = e.target && e.target.tagName;
     if ((t === "INPUT" || t === "TEXTAREA") && !panel.hidden) return;
     if (t === "INPUT" || t === "TEXTAREA") e.target.blur();
-    var k = e.key.toLowerCase();
+    var k = ({ KeyL: "l", KeyM: "m", KeyR: "r", KeyP: "p" })[e.code] || (e.key || "").toLowerCase();
     if (!panel.hidden && k !== "m" && k !== "escape") { e.stopPropagation(); return; }
     if (["l","m","r","p"].indexOf(k) > -1 && !e.ctrlKey && !e.metaKey) e.preventDefault();
     if (k === "l") { e.stopPropagation(); showLogin(); }
@@ -206,6 +208,7 @@
   // 처음 연결 확인 (표지의 QR)
   liveRpc("live_state", { p_room: room }).then(function () {
     online = true;
+    paintWarn();
     var first = document.querySelector(".slide.on");
     if (first) document.dispatchEvent(new CustomEvent("slidechange", { detail: { slide: first, index: [].indexOf.call(document.querySelectorAll(".slide"), first) } }));
   }).catch(function () {});
